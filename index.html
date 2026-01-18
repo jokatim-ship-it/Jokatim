@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>JOKATIM CLOTHING HUB AND WINE STORE</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body { font-family: Arial; background-color: powderblue; margin: 0; padding: 0; }
+        h1 { background: black; color: white; padding: 15px; text-align: center; margin: 0; }
+        
+        /* Matching the navigation from your shops */
+        nav { background: #ddd; padding: 10px; text-align: center; }
+        nav a { margin: 0 10px; text-decoration: none; color: black; font-weight: bold; }
+        
+        h2 { 
+            color: white; 
+            text-align: center; 
+            font-family: courier; 
+            font-size: 160%; 
+            border: solid; 
+            border-radius: 15px; 
+            padding: 10px; 
+            background-color: blue; 
+            margin: 20px auto;
+            max-width: 80%;
+        }
+        
+        p { color: green; text-align: center; padding: 0 20px; font-weight: bold; }
+        
+        .container { padding: 15px; }
+        figure { margin: 20px 0; background: white; padding: 10px; border-radius: 10px; }
+        img { width: 100%; border: solid 2px black; border-radius: 5px; }
+        figcaption { color: purple; text-align: center; font-style: italic; padding: 10px; }
+        .label { font-size: 200%; font-weight: bold; display: block; text-align: center; margin-bottom: 5px; }
+        
+        #cartStatus { 
+            background: white; 
+            padding: 10px; 
+            text-align: center; 
+            border-top: 2px solid black; 
+            position: sticky; 
+            bottom: 0;
+        }
+    </style>
+</head>
+
+<body>
+
+<h1>JOKATIM CLOTHING HUB AND WINE STORE</h1>
+
+<nav>
+  <a href="index.html">Home</a>
+  <a href="wineshop.html">Wine Shop</a>
+  <a href="gotoshop.html">Clothes Shop</a>
+  <a href="contact.html">Contact</a>
+</nav>
+
+<div class="container">
+    <h2>Welcome to Jokatim</h2>
+
+    <p>We try to offer our best service to the utmost satisfaction of our customers. Thanks for choosing Jokatim!</p>
+
+    <figure>
+        <span class="label">Winery</span>
+        <img src="https://media.istockphoto.com/id/1389712277/photo/two-glasses-of-white-and-red-wine-on-an-old-barrel-outside-in-the-vineyard.jpg?s=1024x1024&w=is&k=20&c=wLHdLcFNKM_v0fFwwLI4CXKx6Ztx1ACn6q7cW0fE8L0=" alt="Wine scene">
+        <figcaption>A Bottle of wine and you by the side of your loved ones. Fits perfect! The perfect scene for a date night or family bonding.</figcaption>
+    </figure>
+
+    <figure>
+        <span class="label">Clothing Store</span>
+        <img src="https://images.pexels.com/photos/3768005/pexels-photo-3768005.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="Clothes store">
+    </figure>
+</div>
+
+<div id="cartStatus">
+    Cart: <span id="cartCount">0</span> items
+</div>
+
+<script>
+    function updateCartCount() {
+        // Shared cart logic
+        const cart = JSON.parse(localStorage.getItem("jokatim_cart")) || [];
+        const count = cart.reduce((total, item) => total + item.qty, 0);
+        document.getElementById("cartCount").innerText = count;
+    }
+
+    // Run when home page opens
+    updateCartCount();
+</script>
+
+</body>
+</html>

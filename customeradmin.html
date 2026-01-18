@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Jokatim Admin (GitHub Mode)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body{ font-family:Arial; background:#f2f2f2; padding:15px; margin:0; }
+        h2,h3{text-align:center}
+        .card{ background:white; padding:15px; border-radius:8px; margin:10px auto; max-width:400px; box-shadow:0 2px 5px rgba(0,0,0,0.1); }
+        input,select,button{ width:100%; padding:12px; margin:8px 0; border:1px solid #ccc; border-radius:5px; box-sizing:border-box; }
+        button{ background:black; color:white; border:none; cursor:pointer; font-weight:bold; }
+        button:active{ opacity: 0.7; }
+        .logout{ background:gray; margin-top:20px; }
+        .hidden{ display:none !important; }
+        #status { font-size:12px; color:blue; text-align:center; margin-bottom:10px; }
+    </style>
+</head>
+<body>
+
+<div id="loginBox" class="card">
+    <h2>Admin Login</h2>
+    <input id="adminPass" type="password" placeholder="Enter Password">
+    <button onclick="login()">Login</button>
+</div>
+
+<div id="panel" class="card hidden">
+    <h2>Jokatim Control</h2>
+    <div id="status">Ready</div>
+
+    <h3>Add Product</h3>
+    <input id="name" placeholder="Product name">
+    <input id="price" type="number" placeholder="Price (#)">
+
+    <select id="category">
+        <option value="clothes">Clothes</option>
+        <option value="wine">Wine</option>
+    </select>
+
+    <input id="imgUrl" placeholder="Image URL (e.g. from ImgBB)">
+    
+    <button id="saveBtn" onclick="saveProduct()">Save to GitHub</button>
+    <button class="logout" onclick="location.reload()">Logout</button>
+</div>
+
+<script>
+    // --- CONFIGURATION ---
+    const TOKEN = "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"; 
+    const OWNER = "jokatim-ship-it";
+    const REPO = "Jokatim";
+    const PATH = "products.json";
+
+    // 1. LOGIN LOGIC
+    function login() {
+        const pass = document.getElementById("adminPass").value;
+        if(pass === "1234") { // Set your own password here
+            document.getElementById("loginBox").classList.add("hidden");
+            document.getElementById("panel").classList.remove("hidden");
+        } else {
+            alert("Wrong password!");
+        }
+    }
+
+    // 2. SAVE LOGIC
+    async function saveProduct() {
+        const name = document.getElementById("name").value.trim();
+        const price = document.getElementById("price").value;
+        const category = document.getElementById("category").value;
+        const img = document.getElementById("imgUrl").value.trim();
+        const status = document.getElementById("status");
+        const btn = document.getElementById("saveBtn");
+
+        if(!name || !price || !img) return alert("Fill all fields");
+
+        status.innerText = "Syncing with GitHub...";
+        btn.disabled = true;
+
+        try {
+            // A. Get current file from GitHub
+            const url = `https://api.github.com/repos/${OWNER}/${REPO}/contents/${PATH}`;
+            const res = await fetch(url, {
+                headers: { "Authorization": `token ${TOKEN}` }
+            });
+            const data = await res.json();
+            
+            // B. Decode existing products
+            let products = JSON.parse(atob(data.content));
+
+            // C. Add new product
+            const newProduct = {
+                id: Date.now(),
+                name,
+                price,
+                category,
+                image_url: img
+            };
+            products.push(newProduct);
+
+            // D. Push updated list back to GitHub
+            const update = await fetch(url, {
+                method: "PUT",
+                headers: {
+                    "Authorization": `token ${TOKEN}`,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    message: `Added ${name}`,
+                    content: btoa(unescape(encodeURIComponent(JSON.stringify(products, null, 2)))),
+                    sha: data.sha
+                })
+            });
+
+            if(update.ok) {
+                alert("Product Saved! Shop will update in ~60 seconds.");
+                document.getElementById("name").value = "";
+                document.getElementById("price").value = "";
+                document.getElementById("imgUrl").value = "";
+            } else {
+                alert("Error saving: " + update.statusText);
+            }
+        } catch (err) {
+            console.error(err);
+            alert("Failed to connect to GitHub.");
+        } finally {
+            status.innerText = "Ready";
+            btn.disabled = false;
+        }
+    }
+</script>
+</body>
+</html>
