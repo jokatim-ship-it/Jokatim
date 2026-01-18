@@ -12,5 +12,12 @@
     "price": "75000",
     "category": "wine",
     "image_url": "\"https://i.ibb.co/hRss3ty0/IMG-7361.png"
+  },
+  {
+    "id": 1768775878803,
+    "name": "Clover series. (hoodie)",
+    "price": "32000",
+    "category": "clothes",
+    "image_url": "https://i.ibb.co/Fq82qyKD/792141f3-bc6a-4b12-9719-b6e30c74539b.jpg"
   }
 ]
