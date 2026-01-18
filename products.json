@@ -5,5 +5,12 @@
     "price": "24000",
     "category": "clothes",
     "image_url": "https://i.ibb.co/FbJdNGxH/1111fe2b-f5cb-4274-8470-cc52d401b20c.jpg"
+  },
+  {
+    "id": 1768775706388,
+    "name": "Hennessy  VS 75cl.",
+    "price": "75000",
+    "category": "wine",
+    "image_url": "\"https://i.ibb.co/hRss3ty0/IMG-7361.png"
   }
 ]
